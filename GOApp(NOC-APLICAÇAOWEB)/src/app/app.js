@@ -10,6 +10,7 @@ var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
 
 var port = 5000;
+// configurando a conexao com o banco
 var db = {
 	server: 'gameoverserve.database.windows.net',
 	user: 'adminGO',
@@ -22,6 +23,9 @@ var db = {
 	}
 };
 
+
+//conexao com o banco
+
 sql.connect(db, function (err) {
 
 	if (err) console.log(err);
@@ -31,7 +35,6 @@ sql.connect(db, function (err) {
 
 	// query to the database and get the records
 	request.query('select * from users', function (err, recordset) {
-
 		if (!err) {
 			console.log(recordset)
 		}
