@@ -2,7 +2,7 @@
   "name": "CrudNode",
   "version": "0.2.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "build": "tsc -w",
     "dev": "nodemon build/index.js",
