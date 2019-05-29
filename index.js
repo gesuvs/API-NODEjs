@@ -1,0 +1,61 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const morgan_1 = __importDefault(require("morgan"));
+const cors_1 = __importDefault(require("cors"));
+const indexRoutes_1 = __importDefault(require("./routes/indexRoutes"));
+const usuarioRoutes_1 = __importDefault(require("./routes/routesProjeto/usuarioRoutes"));
+const businessRoutes_1 = __importDefault(require("./routes/businessRoutes"));
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const graficoRoutes_1 = __importDefault(require("./routes/graficoRoutes"));
+const hardwareRoutes_1 = __importDefault(require("./routes/hardwareRoutes"));
+// import middleware from './middleware';
+class Server {
+    constructor() {
+        this.app = express_1.default();
+        this.config();
+        this.routes();
+        // this.error();
+    }
+    config() {
+        this.app.set('port', process.env.PORT || 3000);
+        this.app.use(morgan_1.default('dev'));
+        this.app.use(cors_1.default());
+        this.app.use((express_1.default.json()));
+        this.app.use(express_1.default.urlencoded({
+            extended: false
+        }));
+        this.app.use((req, res, next) => {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+            res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+            next();
+        });
+        // this.app.use(middleware(pool)
+    }
+    ;
+    routes() {
+        this.app.use(indexRoutes_1.default);
+        // this.app.use('/api/user', userRoutes);
+        this.app.use('/api/usuario', usuarioRoutes_1.default);
+        this.app.use('/api/business', businessRoutes_1.default);
+        this.app.use('/api/login', authRoutes_1.default);
+        this.app.use('/api/grafico', graficoRoutes_1.default);
+        this.app.use('/api/hardware', hardwareRoutes_1.default);
+    }
+    // error() {
+    //     this.app.use((err:Er, req: Request, res: Response, next: NextFunction) => {
+    //         res.status(500).send('Error');
+    //     })
+    // }
+    start() {
+        this.app.listen(this.app.get('port'), () => {
+            console.log(`Server on port `, this.app.get('port'));
+        });
+    }
+}
+const server = new Server();
+server.start();
