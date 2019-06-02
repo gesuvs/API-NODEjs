@@ -6,13 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
-const indexRoutes_1 = __importDefault(require("./routes/indexRoutes"));
-const usuarioRoutes_1 = __importDefault(require("./routes/routesProjeto/usuarioRoutes"));
-const businessRoutes_1 = __importDefault(require("./routes/businessRoutes"));
-const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
-const graficoRoutes_1 = __importDefault(require("./routes/graficoRoutes"));
-const hardwareRoutes_1 = __importDefault(require("./routes/hardwareRoutes"));
+// import userRoutes from './routes/userRoutes';
 // import middleware from './middleware';
+// import authRoutes from './routes/authRoutes';
+// import businessRoutes from './routes/businessRoutes';
+const indexRoutes_1 = __importDefault(require("./routes/indexRoutes"));
+const loginRoutes_1 = __importDefault(require("./routes/routesProjeto/loginRoutes"));
+const usuarioRoutes_1 = __importDefault(require("./routes/routesProjeto/usuarioRoutes"));
+const graficoRoutes_1 = __importDefault(require("./routes/graficoRoutes"));
+const hardwareRoutes_1 = __importDefault(require("./routes/routesProjeto/hardwareRoutes"));
+const maquinaRoutes_1 = __importDefault(require("./routes/routesProjeto/maquinaRoutes"));
+const eventoRoutes_1 = __importDefault(require("./routes/routesProjeto/eventoRoutes"));
 class Server {
     constructor() {
         this.app = express_1.default();
@@ -34,17 +38,19 @@ class Server {
             res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
             next();
         });
-        // this.app.use(middleware(pool)
     }
     ;
     routes() {
         this.app.use(indexRoutes_1.default);
-        // this.app.use('/api/user', userRoutes);
+        this.app.use('/api/login', loginRoutes_1.default);
         this.app.use('/api/usuario', usuarioRoutes_1.default);
-        this.app.use('/api/business', businessRoutes_1.default);
-        this.app.use('/api/login', authRoutes_1.default);
         this.app.use('/api/grafico', graficoRoutes_1.default);
         this.app.use('/api/hardware', hardwareRoutes_1.default);
+        this.app.use('/api/maquina', maquinaRoutes_1.default);
+        this.app.use('/api/evento', eventoRoutes_1.default);
+        // this.app.use('/api/business', businessRoutes);
+        // this.app.use('/api/user', userRoutes);
+        // this.app.use('/api/login', authRoutes);
     }
     // error() {
     //     this.app.use((err:Er, req: Request, res: Response, next: NextFunction) => {

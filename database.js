@@ -15,6 +15,15 @@ const pool = new mssql_1.default.ConnectionPool(keys_1.default, err => {
     }
     ;
 });
+pool.on('error', err => {
+    try {
+        pool.connect().then(res => {
+            res.connected;
+        }).catch(err => console.log(err));
+    }
+    catch (error) {
+    }
+});
 pool.on('release', () => console.log('pool => conexao retornada'));
 pool.on('SIGINT', () => pool.close(err => {
     if (err)
@@ -22,5 +31,4 @@ pool.on('SIGINT', () => pool.close(err => {
     console.log('pool => fechado');
     process.exit(0);
 }));
-// const pool = new Banco();
 exports.default = pool;

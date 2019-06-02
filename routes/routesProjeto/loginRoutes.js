@@ -4,16 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const graficoController_1 = __importDefault(require("../controllers/graficoController"));
-class GraficoRoutes {
+const loginController_1 = __importDefault(require("../../controllers/controllersProjeto/loginController"));
+class LoginRoutes {
     constructor() {
         this.router = express_1.Router();
         this.config();
     }
     config() {
-        this.router.get('/', graficoController_1.default.list);
-        this.router.get('/:id', graficoController_1.default.getUserId);
+        // this.router.get('/:id', loginController.getLogin);
+        this.router.post('/', loginController_1.default.getLogin);
     }
 }
-const graficoRoutes = new GraficoRoutes();
-exports.default = graficoRoutes.router;
+const loginRoutes = new LoginRoutes();
+exports.default = loginRoutes.router;

@@ -11,8 +11,8 @@ class GraficoRoutes {
         this.config();
     }
     config() {
-        this.router.get('/', graficoController_1.default.list);
-        this.router.get('/:id', graficoController_1.default.getUserId);
+        this.router.get('/:id', graficoController_1.default.list);
+        // this.router.get('/:id', graficoController.getUserId);
     }
 }
 const graficoRoutes = new GraficoRoutes();

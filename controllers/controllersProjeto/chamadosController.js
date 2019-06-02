@@ -11,11 +11,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("../database"));
-class UserController {
+const database_1 = __importDefault(require("../../database"));
+class ChamadosController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query `select * from users`.then(resultado => {
+            yield database_1.default.query `select * from userSeven`.then(resultado => {
                 if (resultado.recordset.length > 0) {
                     res.json(resultado.recordset);
                 }
@@ -24,15 +24,17 @@ class UserController {
                         text: "Nenhum usuario encontrado"
                     });
                 }
-            });
+            }).catch(err => res.status(500).send(err));
         });
     }
     ;
     getUserId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            yield database_1.default.query `select * from users where userId = ${id}`.then(resultado => {
-                if (resultado.recordset.length > 0) {
+            // const { id } = req.params;
+            const id = req.params.id;
+            yield database_1.default.query `select * from userSeven where id_usuario = ${id}`.then(resultado => {
+                if (resultado.recordset[0]) {
+                    console.log(resultado.recordset);
                     return res.json(resultado.recordset[0]);
                 }
                 else {
@@ -40,19 +42,32 @@ class UserController {
                         text: "Usuario nao encontrado"
                     });
                 }
-            });
+            }).catch(err => res.status(500).send(err));
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { username } = req.body;
-            const { password } = req.body;
-            const { firstName } = req.body;
-            const { lastName } = req.body;
-            yield database_1.default.query `insert into [users](username, password,firstName,lastName) values (${username}, ${password},${firstName}, ${lastName})`;
-            res.json({
-                text: 'Usuario Criado'
-            });
+            // const nome = req.body.nome;
+            // const usuario = req.body.usuario;
+            // const email = req.body.email;
+            // const senha = req.body.senha;
+            const { nome } = req.body;
+            const { usuario } = req.body;
+            const { email } = req.body;
+            const { senha } = req.body;
+            yield database_1.default.query `insert into [userSeven](nome, usuario,email,senha) values (${nome}, ${usuario},${email}, ${senha})`.then(resultado => {
+                console.log(resultado.recordset);
+                if (resultado.recordsets.length > 0) {
+                    res.json({
+                        text: 'Usuario Criado'
+                    });
+                }
+                else {
+                    res.json({
+                        text: "Usuario ja existe"
+                    });
+                }
+            }).catch(err => res.status(500).send(err));
         });
     }
     update(req, res) {
@@ -62,12 +77,12 @@ class UserController {
             const { password } = req.body;
             const { firstName } = req.body;
             const { lastName } = req.body;
-            yield database_1.default.query `update [users] set username = ${username}, password = ${password}, firstName = ${firstName}, lastName = ${lastName} where userId = ${id}`
+            yield database_1.default.query `update [userSeven] set username = ${username}, password = ${password}, firstName = ${firstName}, lastName = ${lastName} where userId = ${id}`
                 .then(resultado => {
                 res.json({
                     text: "Usuario atualizado com sucesso"
                 });
-            });
+            }).catch(err => res.status(500).send(err));
         });
     }
     delete(req, res) {
@@ -80,5 +95,5 @@ class UserController {
         });
     }
 }
-const userController = new UserController();
-exports.default = userController;
+const chamadosController = new ChamadosController();
+exports.default = chamadosController;

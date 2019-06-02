@@ -11,13 +11,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const database_1 = __importDefault(require("../database"));
-class AuthController {
+const database_1 = __importDefault(require("../../database"));
+class LoginController {
     getLogin(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const username = req.body.username;
             const password = req.body.password;
-            yield database_1.default.query `select * from users where username = ${username} and password = ${password}`.then(resultado => {
+            yield database_1.default.query `select * from userSeven where usuario = ${username} and senha = ${password}`.then(resultado => {
                 res.json(resultado.recordset[0]);
                 console.log(resultado.recordset[0]);
                 // res.json(resultado.recordset[0])
@@ -25,5 +25,5 @@ class AuthController {
         });
     }
 }
-const authController = new AuthController();
-exports.default = authController;
+const loginController = new LoginController();
+exports.default = loginController;

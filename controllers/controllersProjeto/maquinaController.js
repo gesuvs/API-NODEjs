@@ -12,15 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../../database"));
-class UsuarioController {
+class MaquinaController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query `select * from users`.then(resultado => {
-                // try {
-                //     res.json(resultado.recordset)
-                // } catch () {
-                //     // error("msg", error)
-                // }
+            const id = req.params.id;
+            yield database_1.default.query `select * from maquina join userSeven on maquina.fk_idusuario = ${id} and userSeven.id_usuario = ${id};`.then(resultado => {
                 if (resultado.recordset.length > 0) {
                     res.json(resultado.recordset);
                 }
@@ -29,15 +25,32 @@ class UsuarioController {
                         text: "Nenhum usuario encontrado"
                     });
                 }
-            }).then(() => database_1.default.off);
+            }).catch(err => res.status(500).send(err));
         });
     }
     ;
-    getUserId(req, res) {
+    all(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const id = req.params.id;
+            yield database_1.default.query `select * from maquina`.then(resultado => {
+                if (resultado.recordset.length > 0) {
+                    res.json(resultado.recordset);
+                }
+                else {
+                    res.status(404).json({
+                        text: "Nenhum usuario encontrado"
+                    });
+                }
+            }).catch(err => res.status(500).send(err));
+        });
+    }
+    ;
+    getMaquinaId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             // const { id } = req.params;
             const id = req.params.id;
-            yield database_1.default.query `select * from users where userId = ${id}`.then(resultado => {
+            const idSoft = req.params.id;
+            yield database_1.default.query `select * from maquina, userSeven where id_soft = ${id}`.then(resultado => {
                 if (resultado.recordset[0]) {
                     console.log(resultado.recordset);
                     return res.json(resultado.recordset[0]);
@@ -47,18 +60,18 @@ class UsuarioController {
                         text: "Usuario nao encontrado"
                     });
                 }
-            });
+            }).catch(err => res.status(500).send(err));
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { username } = req.body;
-            const { password } = req.body;
-            const { firstName } = req.body;
+            const nome_soft = req.body.nome_soft;
+            const fk_idusuario = req.body.fk_idusuario;
+            const fk_idEvento = req.body.fk_idEvento;
             const { lastName } = req.body;
-            yield database_1.default.query `insert into [users](username, password,firstName,lastName) values (${username}, ${password},${firstName}, ${lastName})`;
+            yield database_1.default.query `insert into [maquina](nome_soft,fk_idusuario,fk_idEvento) values (${nome_soft},${fk_idusuario},${fk_idEvento})`;
             res.json({
-                text: 'Usuario Criado'
+                text: 'Maquina Cadastrada'
             });
         });
     }
@@ -74,7 +87,7 @@ class UsuarioController {
                 res.json({
                     text: "Usuario atualizado com sucesso"
                 });
-            });
+            }).catch(err => res.status(500).send(err));
         });
     }
     delete(req, res) {
@@ -87,5 +100,5 @@ class UsuarioController {
         });
     }
 }
-const usuarioController = new UsuarioController();
-exports.default = usuarioController;
+const maquinaController = new MaquinaController();
+exports.default = maquinaController;

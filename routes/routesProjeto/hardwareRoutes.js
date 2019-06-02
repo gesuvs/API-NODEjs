@@ -4,16 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const authController_1 = __importDefault(require("../controllers/authController"));
-class AuthRoutes {
+const hardwareController_1 = __importDefault(require("../../controllers/controllersProjeto/hardwareController"));
+class HardwareRoutes {
     constructor() {
         this.router = express_1.Router();
         this.config();
     }
     config() {
-        // this.router.get('/:id', loginController.getLogin);
-        this.router.post('/', authController_1.default.getLogin);
+        this.router.get('/:id', hardwareController_1.default.list);
+        // this.router.get('/:id', hardwareController.getUserId);
     }
 }
-const authRoutes = new AuthRoutes();
-exports.default = authRoutes.router;
+const hardwareRoutes = new HardwareRoutes();
+exports.default = hardwareRoutes.router;
