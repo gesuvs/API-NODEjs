@@ -13,11 +13,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = __importDefault(require("../../database"));
 class EventoController {
+    //select * from evento, userSeven, 
+    //maquina where evento.fk_iduserseven = userSeven.id_usuario 
+    //and userSeven.id_usuario = 315 and evento.id_evento = 50
     getAllEventoById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
             // const teste = "<p>dois</p>"
             yield database_1.default.query `select * from evento where fk_idUserSeven = ${id}`.then(resultado => {
+                // res.send(teste)
+                res.json(resultado);
+                console.log(resultado.recordset[0]);
+                // res.json(resultado.recordset[0])
+            });
+        });
+    }
+    getAllEventoAndMaquinaById(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const id = req.params.id;
+            // const teste = "<p>dois</p>"
+            yield database_1.default.query `select * from evento, userSeven, maquina where
+        evento.fk_iduserseven = userSeven.id_usuario and
+        maquina.fk_idusuario = userSeven.id_usuario and evento.id_evento = ${id}`.then(resultado => {
                 // res.send(teste)
                 res.json(resultado);
                 console.log(resultado.recordset[0]);

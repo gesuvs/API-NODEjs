@@ -15,83 +15,65 @@ const database_1 = __importDefault(require("../../database"));
 class ChamadosController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield database_1.default.query `select * from userSeven`.then(resultado => {
-                if (resultado.recordset.length > 0) {
+            const id = req.params.id;
+            yield database_1.default.query `select * from chamado, maquina, userSeven where 
+        chamado.fk_idsoft = maquina.id_soft and maquina.fk_idusuario = userSeven.id_usuario
+        and userSeven.id_usuario = ${id}`
+                .then(resultado => {
+                if (resultado.recordset) {
                     res.json(resultado.recordset);
                 }
                 else {
                     res.status(404).json({
-                        text: "Nenhum usuario encontrado"
+                        text: "Nenhum chamado encontrado"
                     });
                 }
             }).catch(err => res.status(500).send(err));
         });
     }
     ;
-    getUserId(req, res) {
+    totalRows(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const { id } = req.params;
             const id = req.params.id;
-            yield database_1.default.query `select * from userSeven where id_usuario = ${id}`.then(resultado => {
-                if (resultado.recordset[0]) {
-                    console.log(resultado.recordset);
-                    return res.json(resultado.recordset[0]);
+            yield database_1.default.query `select count(*) as total_de_chamado from chamado, maquina, userSeven where 
+        chamado.fk_idsoft = maquina.id_soft and maquina.fk_idusuario = userSeven.id_usuario
+        and userSeven.id_usuario = ${id}`
+                .then(resultado => {
+                if (resultado.recordset) {
+                    res.json(resultado.recordset);
                 }
                 else {
                     res.status(404).json({
-                        text: "Usuario nao encontrado"
+                        text: "Nenhum chamado encontrado"
                     });
                 }
             }).catch(err => res.status(500).send(err));
         });
     }
+    ;
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const nome = req.body.nome;
-            // const usuario = req.body.usuario;
-            // const email = req.body.email;
-            // const senha = req.body.senha;
-            const { nome } = req.body;
-            const { usuario } = req.body;
-            const { email } = req.body;
-            const { senha } = req.body;
-            yield database_1.default.query `insert into [userSeven](nome, usuario,email,senha) values (${nome}, ${usuario},${email}, ${senha})`.then(resultado => {
+            const data = req.body.data;
+            const hora = req.body.hora;
+            const descricao = req.body.descricao;
+            const criticidade = req.body.criticidade;
+            const onde_ocorreu = req.body.onde_ocorreu;
+            const fk_idSoft = req.body.fk_idSoft;
+            yield database_1.default.query `insert into [chamado](data, hora,descricao,criticidade,onde_ocorreu,fk_idSoft) values 
+        ((select convert(date,${data},103)),${hora}, ${descricao},${criticidade}, 
+            ${onde_ocorreu},${fk_idSoft})`.then(resultado => {
                 console.log(resultado.recordset);
                 if (resultado.recordsets.length > 0) {
                     res.json({
-                        text: 'Usuario Criado'
+                        text: 'Chamado Criado'
                     });
                 }
                 else {
                     res.json({
-                        text: "Usuario ja existe"
+                        text: "Chamado ja existe"
                     });
                 }
             }).catch(err => res.status(500).send(err));
-        });
-    }
-    update(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            const { username } = req.body;
-            const { password } = req.body;
-            const { firstName } = req.body;
-            const { lastName } = req.body;
-            yield database_1.default.query `update [userSeven] set username = ${username}, password = ${password}, firstName = ${firstName}, lastName = ${lastName} where userId = ${id}`
-                .then(resultado => {
-                res.json({
-                    text: "Usuario atualizado com sucesso"
-                });
-            }).catch(err => res.status(500).send(err));
-        });
-    }
-    delete(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { id } = req.params;
-            yield database_1.default.request().query(`delete from users where userId = ${id}`);
-            res.json({
-                text: "Usuario deletado com sucesso"
-            });
         });
     }
 }
