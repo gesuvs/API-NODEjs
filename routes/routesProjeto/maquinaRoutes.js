@@ -15,6 +15,7 @@ class MaquinaRoutes {
         this.router.get('/', maquinaController_1.default.all);
         this.router.get('/:id', maquinaController_1.default.list);
         this.router.get('/:id/seven/:id', maquinaController_1.default.getMaquinaId);
+        this.router.delete('/:id', maquinaController_1.default.delete);
         // this.router.post('/', usuarioController.create);
         // this.router.put('/:id', usuarioController.update);
         // this.router.delete('/:id', usuarioController.delete);

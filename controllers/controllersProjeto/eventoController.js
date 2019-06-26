@@ -68,6 +68,15 @@ class EventoController {
             }).catch(err => res.status(500).send(err));
         });
     }
+    delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const id = req.params.id;
+            yield database_1.default.query `delete from evento where id_Evento = ${id}`;
+            res.json({
+                text: "Usuario deletado com sucesso"
+            });
+        });
+    }
 }
 const eventoController = new EventoController();
 exports.default = eventoController;
