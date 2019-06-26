@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private":true,
   "engines":{
-  "node":"10.15.2"
+  "node":"10.15.2 --scripts-prepend-node-path"
   },
   "description": "",
   "main": "app.js",
